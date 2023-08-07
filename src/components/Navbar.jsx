@@ -2,10 +2,14 @@
 import Image from "next/image";
 import Link from "next/link";
 import NavLink from "./NavLink";
+import { afterLoginNavData, beforeLoginNavData } from "@/data/navData";
+import useTheme from "@/hooks/useTheme";
 
 const Navbar = () => {
   
-
+  const user = null;
+  const navData = user ? afterLoginNavData : beforeLoginNavData;
+  const {theme, toggleTheme} = useTheme()
   return (
     <nav className="navbar sticky top-0 z-10 bg-slate-200 shadow-lg dark:bg-slate-900 lg:pr-3">
       <div className="flex-1">
@@ -19,13 +23,14 @@ const Navbar = () => {
         // } top-[4.5rem] flex w-full flex-col bg-slate-200 pb-3 pt-2 transition-all duration-300 dark:bg-slate-900 lg:static lg:w-[unset] lg:flex-row lg:bg-transparent lg:pb-0 lg:pt-0 dark:lg:bg-transparent`}
       >
         <ul className="menu menu-horizontal flex-col px-1 lg:flex-row">
-          {[].map(({ path, title }) => (
+          {navData.map(({ path, title }) => (
             <li key={path} className="mx-auto">
               <NavLink
-                
+                href={path}
                 activeClassName="text-blue-500"
                 exact={path === "/"}
               >
+                {title}
               </NavLink>
             </li>
           ))}
@@ -110,7 +115,9 @@ const Navbar = () => {
         )
         <label className="swap swap-rotate lg:ml-2">
           <input
-            type="checkbox"
+           onChange={toggleTheme}
+           type="checkbox"
+           checked={theme === "dark"}
           />
           <svg
             className="swap-on h-9 w-9 fill-current"
